@@ -6,11 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@line/bot-sdk": "^6.0.2",
+    "axios": "^0.18.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^5.0.1",
     "express": "~4.16.0",
+    "feedparser": "^2.2.9",
+    "firebase": "^4.5.0",
+    "firebase-admin": "^5.4.2",
     "http-errors": "~1.6.2",
+    "linebot": "^1.4.1",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "request": "^2.87.0"
   }
 }
