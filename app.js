@@ -13,11 +13,11 @@ app.set('view engine', 'pug');
 app.use('/users', usersRouter);
 
 /* GET home page. */
-app.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'Express'
-  });
-});
+// app.get('/', function (req, res, next) {
+//   res.render('index', {
+//     title: 'Express'
+//   });
+// });
 
 // create LINE SDK config from env variables
 const config = {

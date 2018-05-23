@@ -1,7 +1,51 @@
 doctype html
-html
+html(lang='en')
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title 影劇爬蟲
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+    script(src="https://code.jquery.com/jquery-3.2.1.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+    style.
+      .breadcrumb {
+        background-color: transparent;
+      }
+    
+      .text-primary {
+        color: #4073c4 !important;
+      }
+      .post {
+        line-height: 1.8;
+      }
   body
+    - if (articles === undefined)
+      - articles = {}
+    - if (categories === undefined)
+      - categories = {}
+    nav.navbar.navbar-expand-lg.navbar-dark(style='background-color: #4073c4;')
+      a.navbar-brand(href='/users')
+        i.fa.fa-user-circle(aria-hidden='true')
+        |       Bruce
+      button.navbar-toggler(data-target='#navbarNavAltMarkup', data-toggle='collapse', type='button', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarNavAltMarkup.collapse.navbar-collapse
+        .navbar-nav.ml-auto
+          each category in categories 
+            a.nav-item.nav-link(href='#')!=category.name
+              span.sr-only (current)
     block content
+    footer.bg-light.text-muted.py-5
+      .container
+        ul.list-unstyled.d-flex.justify-content-between
+          li © Copright 2018 Bruce Tseng
+          //- li.ml-auto
+          //-   a.text-info.mr-1(href='#')
+          //-     i.fa.fa-instagram(aria-hidden='true')
+          //-   a.text-info.mr-1(href='#')
+          //-     i.fa.fa-facebook-square(aria-hidden='true')
+          //-   a.text-info(href='')
+          //-     i.fa.fa-twitter(aria-hidden='true')
+
