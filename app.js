@@ -20,6 +20,7 @@ app.use(express.urlencoded({
 }));
 
 function crawler() {
+  console.log("-----------------------");
   feed.fetchDramas((dramas) => {
     let tempSubscribe = [];
     subscribesRef.once('value')
@@ -43,6 +44,7 @@ function crawler() {
             if (element.title.indexOf(element2.title) !== -1 && (element.post_time !== element2.post_time)) {
               console.log(element.title, ' ', element.post_time, ' ', element2.post_time);
               element2.link = element.link;
+              element2.title = element.title;
               test.push(element2);
               subscribesRef.child(element2.id).update({
                   post_time: element.post_time
@@ -93,10 +95,10 @@ function crawler() {
       });
   });
 }
-app.get('/test', function (req, res, next) {
-  crawler();
-  next();
-});
+// app.get('/test', function (req, res, next) {
+//   crawler();
+//   next();
+// });
 
 app.get('/subscribe', function (req, res, next) {
   res.render('subscribe');
@@ -226,9 +228,9 @@ bot.on('message', function (event) {
 const linebotParser = bot.parser();
 app.post('/linewebhook', linebotParser);
 
-cron.schedule('* * 1,3,5,7,9,11,13,15,17,19,21,23 * * *', function(){
-  crawler();
-});
+// cron.schedule('* * 1,3,5,7,9,11,13,15,17,19,21,23 * * *', function(){
+//   crawler();
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
