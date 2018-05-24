@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  - if (article === undefined)
+    - article = {}
+  .main.container-fluid.my-4
+    form.row.justify-content-center(method='POST' action= "/subscribe")
+      .col-md-6
+        label(for='title') 請輸入標題
+        input#title.form-control(type='text', name='title', placeholder='標題', value=(article.title || ''))
+        hr
+        .card.mb-3
+          h6.card-header 是否公開
+          .card-body
+            .btn-group.btn-group-toggle.w-100(data-toggle='buttons')
+              label.btn.btn-outline-primary.w-100(class=(article.status === 'draft') ? "active" : "")
+                input(type='radio', name='status', autocomplete='off', value='draft' checked=(article.status === 'draft'))
+                |  不公開
+              label.btn.btn-outline-primary.w-100(class=(article.status === 'public') ? "active" : "")
+                input(type='radio', name='status', autocomplete='off', value='public' checked=(article.status === 'public'))
+                |  公開
+        .card.mb-3
+          .btn-group.w-100
+            button.btn.btn-outline-primary.w-100(type='submit') 儲存

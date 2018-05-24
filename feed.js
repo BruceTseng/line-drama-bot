@@ -2,7 +2,7 @@ const request = require('request');
 var FeedParser = require('feedparser');
 const url = 'http://feeds.feedburner.com/itv-drama';
 
-var callMe = function (result) {
+var fetchDramas = function (result) {
     var req = request(url);
     var feedparser = new FeedParser();
     var videos = [];
@@ -35,7 +35,7 @@ var callMe = function (result) {
             // console.log(item);
             var type = '';
             if (item.source.title.indexOf('韓國') !== -1) {
-                type = 'koren';
+                type = 'korean';
             } else if (item.source.title.indexOf('日本') !== -1) {
                 type = 'japan';
             } else if (item.source.title.indexOf('台灣') !== -1) {
@@ -44,15 +44,15 @@ var callMe = function (result) {
             videos.push({
                 'title': item.title,
                 'link': item.link,
-                'post_time': item.pubdate,
-                'description' :item.summary,
+                'post_time': Date.parse(item.pubdate),
+                'description': item.summary,
                 'source': item.source.title,
                 type
             });
         }
     });
 
-    feedparser.on('end', function(err) {
+    feedparser.on('end', function (err) {
         if (err) {
             console.log(err, err.stack);
         }
@@ -62,6 +62,17 @@ var callMe = function (result) {
 
 };
 
+var parseDramaList = function (type, dramas) {
+    var temps = [];
+    dramas.forEach((drama) => {
+        if (drama.type === type) {
+            temps.push(drama);
+        }
+    });
+    return temps;
+}
+
 module.exports = {
-    callMe
+    fetchDramas,
+    parseDramaList
 };
