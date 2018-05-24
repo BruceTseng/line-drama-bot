@@ -95,10 +95,10 @@ function crawler() {
       });
   });
 }
-// app.get('/test', function (req, res, next) {
-//   crawler();
-//   next();
-// });
+app.get('/test', function (req, res, next) {
+  crawler();
+  next();
+});
 
 app.get('/subscribe', function (req, res, next) {
   res.render('subscribe');
@@ -228,9 +228,10 @@ bot.on('message', function (event) {
 const linebotParser = bot.parser();
 app.post('/linewebhook', linebotParser);
 
-// cron.schedule('* * 1,3,5,7,9,11,13,15,17,19,21,23 * * *', function(){
-//   crawler();
-// });
+cron.schedule('*/30 * * * *', function(){
+  crawler();
+  // console.log("123");
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
