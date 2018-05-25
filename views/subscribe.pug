@@ -4,7 +4,7 @@ block content
   - if (article === undefined)
     - article = {}
   .main.container-fluid.my-4
-    form.row.justify-content-center(method='POST' action= "/subscribe")
+    form.row.justify-content-center(method='POST' action= `/subscribe/${userId}`)
       .col-md-6
         label(for='title') 請輸入標題
         input#title.form-control(type='text', name='title', placeholder='標題', value=(article.title || ''))

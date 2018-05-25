@@ -14,7 +14,7 @@ var cron = require('node-cron');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use('/users', usersRouter);
-app.use(express.json());
+// app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
@@ -100,18 +100,20 @@ app.get('/test', function (req, res, next) {
   next();
 });
 
-app.get('/subscribe', function (req, res, next) {
-  res.render('subscribe');
+app.get('/subscribe/:userId', function (req, res, next) {
+  res.render('subscribe', {
+    userId: req.params.userId
+  });
 });
 
-app.post('/subscribe', function (req, res) {
+app.post('/subscribe/:userId', function (req, res) {
   const subscribe = req.body;
-  subscribe.subscribers = ["-LDA0LsRDrPauVRF1BS1"];
+  subscribe.subscribers = [req.params.userId];
   console.log(subscribe);
   const subscribeRef = subscribesRef.push();
   subscribeRef.set(subscribe)
     .then((data) => {
-      res.redirect(`/subscribe`);
+      res.redirect(`/subscribe/${req.params.userId}`);
     });
 });
 
@@ -206,24 +208,37 @@ bot.on('unfollow', function (event) {
 });
 
 bot.on('message', function (event) {
-  feed.fetchDramas(dramas => {
-    var replys = [];
-    feed.parseDramaList(event.message.text, dramas).forEach((data) => {
-      // console.log(data);
-      replys.push({
-        type: 'text',
-        text: `新片到了 【${data.title}】 ${data.link}`
+  // console.log(event);
+  if (event.message.text === '訂閱') {
+    usersRef.orderByChild('userId').equalTo(event.source.userId).once('value')
+    .then((snapshot) => {
+      console.log(snapshot.val());
+      let reply = `http://${process.env.SERVER_URL}/subscribe/${ Object.keys(snapshot.val())[0] }`;
+      event.reply(reply).then(function (data) {
+        // success
+      }).catch(function (error) {
+        // error
       });
-    });
-    var temp = [];
-    for (let index = 1; index <= replys.length; index++) {
-      temp.push(replys[index - 1]);
-      if (index % 4 === 0 || index === replys.length) {
-        bot.push(event.source.userId, temp);
-        temp = [];
-      }
-    }
-  });
+    })
+  }
+  // feed.fetchDramas(dramas => {
+  //   var replys = [];
+  //   feed.parseDramaList(event.message.text, dramas).forEach((data) => {
+  //     // console.log(data);
+  //     replys.push({
+  //       type: 'text',
+  //       text: `新片到了 【${data.title}】 ${data.link}`
+  //     });
+  //   });
+  //   var temp = [];
+  //   for (let index = 1; index <= replys.length; index++) {
+  //     temp.push(replys[index - 1]);
+  //     if (index % 4 === 0 || index === replys.length) {
+  //       bot.push(event.source.userId, temp);
+  //       temp = [];
+  //     }
+  //   }
+  // });
 });
 const linebotParser = bot.parser();
 app.post('/linewebhook', linebotParser);
